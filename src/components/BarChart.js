@@ -15,9 +15,9 @@ ChartJS.register(
 
 const BarChart = () => {
     const [chart, setChart] = useState({})
-    let baseUrl = "https://api.coinranking.com/v2/coins/?limit=10";
+    let baseUrl = "Add here api link";
     let proxyUrl = "https://cors-anywhere.herokuapp.com/";
-    let apiKey = "coinranking7045ffb0e155e915b85ec99e626245ebab3875ca1ec83c5a";
+    let apiKey = "xxxx";
 
 
     useEffect(() => {

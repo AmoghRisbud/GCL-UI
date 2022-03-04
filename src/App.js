@@ -1,8 +1,8 @@
 import Selection from "./components/Selection";
-import Analysis from "./components/Analysis";
+import BarChart from "./components/BarChart";
 import Content from "./Content";
 import Navbar from "./Navbar";
-import React, { Component } from 'react';
+import React from 'react';
 import
 {
     BrowserRouter as Router,
@@ -20,15 +20,15 @@ function App() {
         {/*<Routes>*/}
         {/*    <Route path="/components/Content" element={<Content/>}/>*/}
         {/*</Routes>*/}
-        <Routes>
-        <Route path="/" element={<Content/>}>
-        </Route>
-        </Routes>
+
         <Routes>
             <Route path="/components/Selection" element={<Selection/>}/>
         </Routes>
         <Routes>
-            <Route path="/components/Analysis" element={<Analysis/>}/>
+            <Route path="/components/BarChart" element={<BarChart />}/>
+        </Routes>
+        <Routes>
+            <Route path="/" element={<Content/>} />
         </Routes>
     </div>
       </Router>

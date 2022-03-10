@@ -18,7 +18,7 @@ function Navbar() {
                         </ul>
                         <ul className="navbar-nav align-content-end">
                             <li className="nav-item active">
-                                <a className="nav-link active" aria-current="page" aria-selected="true" href="/" onClick={() => alert("are you sure?")}>logout</a>
+                                <a className="nav-link active" aria-current="page" aria-selected="true" href="/" onClick={() => alert("are you sure?")}></a>
                             </li>
                         </ul>
                     </div>

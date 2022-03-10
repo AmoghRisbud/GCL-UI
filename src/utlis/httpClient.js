@@ -8,7 +8,7 @@ const httpClient = ({method, url, data, responseType}) => {
         method,
         url,
         data,
-        headers: {'X-Session-Cookie': cookie.load(process.env.REACT_APP_SESSION_COOKIE_NAME)},
+
         responseType,
     });
 };

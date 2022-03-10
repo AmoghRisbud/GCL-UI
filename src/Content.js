@@ -58,7 +58,7 @@ function Content()
                             <br/>
                             <br/>
                         </Card.Text>
-                        <Button variant="outline-primary" href="/components/Selection">Go somewhere</Button>
+                        <Button variant="outline-primary" href="/components/Selection">Upload SAP data</Button>
                     </Card.Body>
                 </Card>
                 </div>

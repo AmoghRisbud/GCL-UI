@@ -14,6 +14,7 @@ import {
 } from 'react-chartjs-2';
 import {Button, Dropdown, DropdownButton} from "react-bootstrap";
 import axios from "axios";
+
 ChartJS.register(
     LinearScale,
     CategoryScale,
@@ -28,11 +29,11 @@ ChartJS.register(
 
 
 const BarChart = () => {
-    const [chart, setChart] = useState({
+    const [chart1, setChart1] = useState({
         labels: ['', '', '', '', '', ''],
         datasets: [
             {
-                label: "Price in USD",
+                label: "Rs/Kg",
                 data: [0, 0, 0, 0, 0, 0],
                 backgroundColor: [
                     "#ffbb11",
@@ -43,23 +44,57 @@ const BarChart = () => {
                 ]
             }
         ]
-    })
+    });
+    const [chart2, setChart2] = useState({
+        labels: ['', '', '', '', '', ''],
+        datasets: [
+            {
+                label: "Kg/Kg",
+                data: [0, 0, 0, 0, 0, 0],
+                backgroundColor: [
+                    "#ffbb11",
+                    "#ecf0f1",
+                    "#50AF95",
+                    "#f3ba2f",
+                    "#2a71d0"
+                ]
+            }
+        ]
+    });
+    const [chart3, setChart3] = useState({
+        labels: ['', '', '', '', '', ''],
+        datasets: [
+            {
+                label: "Kg/Kg",
+                data: [0, 0, 0, 0, 0, 0],
+                backgroundColor: [
+                    "#ffbb11",
+                    "#ecf0f1",
+                    "#50AF95",
+                    "#f3ba2f",
+                    "#2a71d0"
+                ]
+            }
+        ]
+    });
     const [dropdownTitle, setDropdownTitle] = useState("Select Product");
     const [monthTitle, setmonthTitle] = useState("Select Month");
-    const [yearTitle, setyearTitle] = useState("1990");
+    const [yearTitle, setyearTitle] = useState("2020");
 
-    const [chart1Type,setChart1Type] = useState("bar");
-    // const [chart2Type,setChart2Type] = useState("bar");
-    // const [chart3Type,setChart3Type] = useState("bar");
+    const [chart1Type, setChart1Type] = useState("bar");
+    const [chart2Type, setChart2Type] = useState("bar");
+    const [chart3Type, setChart3Type] = useState("bar");
 
-    const yearDefault = 1990;
+    const yearDefault = 2021;
     const year = [];
     const filename = `${dropdownTitle}-${monthTitle}-${yearTitle}`;
     for (let i = yearDefault; i < 2023; i++) {
         year.push(i);
     }
     const labels = [];
-    const chartData = [];
+    let chart1Data = [];
+    let chart2Data = [];
+    let chart3Data = [];
 
     const sendFileName = async () => {
         const formData = new FormData();
@@ -68,16 +103,17 @@ const BarChart = () => {
             const result = await axios.get(
                 `${process.env.REACT_APP_API_HOST}/fetchdata/${filename}`,
             );
-            console.log(result.data.data)
+            result.data.data.map((row3) => labels.push(row3.Description))
 
-            result.data.data.map((row) => chartData.push(row.Month_cost))
-            result.data.data.map((row) => labels.push(row.Description))
-            setChart({
+
+            result.data.data.map((row) => chart1Data.push(row.Month_cost))
+
+            setChart1({
                 labels: labels,
                 datasets: [
                     {
-                        label: "Price in USD",
-                        data: chartData,
+                        label: "Rs/Kg",
+                        data: chart1Data,
                         backgroundColor: [
                             "#ffbb11",
                             "#ecf0f1",
@@ -87,8 +123,44 @@ const BarChart = () => {
                         ]
                     }
                 ]
-            })
+            });
+            result.data.data.map((row1) => chart2Data.push(row1.month_Rate))
 
+            setChart2({
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Kg/Kg",
+                        data: chart2Data,
+                        backgroundColor: [
+                            "#ffbb11",
+                            "#ecf0f1",
+                            "#50AF95",
+                            "#f3ba2f",
+                            "#2a71d0"
+                        ]
+                    }
+                ]
+            });
+            result.data.data.map((row2) => chart3Data.push(row2.month_Consumption))
+
+            setChart3({
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Kg/Kg",
+                        data: chart3Data,
+                        backgroundColor: [
+                            "#ffbb11",
+                            "#ecf0f1",
+                            "#50AF95",
+                            "#f3ba2f",
+                            "#2a71d0"
+                        ]
+                    }
+                ]
+            });
+            console.log(chart1,chart2,chart3)
         } catch (err) {
             console.log(err)
         }
@@ -104,108 +176,42 @@ const BarChart = () => {
                 window.open(`${process.env.REACT_APP_API_HOST}/download/${filename}`, '_blank')
                 return true
             }
-
-
         } catch (err) {
             console.log(err)
         }
-
     }
-
-
     return (
         <>
             <div className="row" align='center'>
                 <div className="row-sm-6 text-center" align='center'>
                     <div className={'d-flex p-2 justify-content-around'} style={{width: '55rem', margin: 'auto'}}
                          align='center'>
+                        <DropdownButton className=" m-2" style={{padding: '0rem', borderRadius: '5rem'}} title={dropdownTitle}>
+                            <Dropdown.Item href="#/action-1" onClick={() => {
+                                setDropdownTitle("natcpol_cpf");
+                            }}>natcpol_cpf</Dropdown.Item>
+                            <Dropdown.Item href="#/action-2" onClick={() => {
+                                setDropdownTitle("CPF_Symtet_Tech94");
+                            }}>CPF_Symtet_Tech94</Dropdown.Item>
+                            <Dropdown.Item href="#/action-3" onClick={() => {
+                                setDropdownTitle("CPF_TECH_OWN94");
+                            }}>CPF_TECH_OWN94</Dropdown.Item>
+                            <Dropdown.Item href="#/action-3" onClick={() => {
+                                setDropdownTitle("NATCPOL_ESTER");
+                            }}>NATCPOL_ESTER</Dropdown.Item>
+                            <Dropdown.Item href="#/action-1" onClick={() => {
+                                setDropdownTitle("ACTP_ESTER");
+                            }}>ACTP_ESTER</Dropdown.Item>
+                            <Dropdown.Item href="#/action-2" onClick={() => {
+                                setDropdownTitle("RRCMA");
+                            }}>RRCMA</Dropdown.Item>
+                            <Dropdown.Item href="#/action-3" onClick={() => {
+                                setDropdownTitle("DCPFROMDCA");
+                            }}>DCPFROMDCA</Dropdown.Item>
+                            <Dropdown.Item href="#/action-1" onClick={() => {
+                                setDropdownTitle("MECL");
+                            }}>MECL</Dropdown.Item>
 
-
-                        <DropdownButton className=" m-2" style={{padding: '0rem',borderRadius:'5rem'}} title={dropdownTitle}>
-                            <Dropdown.Item href="#/action-1" onClick={() => {
-                                setDropdownTitle("Product 1");
-                            }}>Product 1</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2" onClick={() => {
-                                setDropdownTitle("Product 2");
-                            }}>Product 2</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3" onClick={() => {
-                                setDropdownTitle("Product 3");
-                            }}>Product 3</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3" onClick={() => {
-                                setDropdownTitle("Product 4");
-                            }}>Product 4</Dropdown.Item>
-                            <Dropdown.Item href="#/action-1" onClick={() => {
-                                setDropdownTitle("Product 5");
-                            }}>Product 5</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2" onClick={() => {
-                                setDropdownTitle("Product 6");
-                            }}>Product 6</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3" onClick={() => {
-                                setDropdownTitle("Product 7");
-                            }}>Product 7</Dropdown.Item>
-                            <Dropdown.Item href="#/action-1" onClick={() => {
-                                setDropdownTitle("Product 8");
-                            }}>Product 8</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2" onClick={() => {
-                                setDropdownTitle("Product 9");
-                            }}>Product 9</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3" onClick={() => {
-                                setDropdownTitle("Product 10");
-                            }}>Product 10</Dropdown.Item>
-                            <Dropdown.Item href="#/action-1" onClick={() => {
-                                setDropdownTitle("Product 11");
-                            }}>Product 11</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2" onClick={() => {
-                                setDropdownTitle("Product 12");
-                            }}>Product 12</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3" onClick={() => {
-                                setDropdownTitle("Product 13");
-                            }}>Product 13</Dropdown.Item>
-                            <Dropdown.Item href="#/action-1" onClick={() => {
-                                setDropdownTitle("Product 14");
-                            }}>Product 14</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2" onClick={() => {
-                                setDropdownTitle("Product 15");
-                            }}>Product 15</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3" onClick={() => {
-                                setDropdownTitle("Product 16");
-                            }}>Product 16</Dropdown.Item>
-                            <Dropdown.Item href="#/action-1" onClick={() => {
-                                setDropdownTitle("Product 17");
-                            }}>Product 17</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2" onClick={() => {
-                                setDropdownTitle("Product 18");
-                            }}>Product 18</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3" onClick={() => {
-                                setDropdownTitle("Product 19");
-                            }}>Product 19</Dropdown.Item>
-                            <Dropdown.Item href="#/action-1" onClick={() => {
-                                setDropdownTitle("Product 20");
-                            }}>Product 20</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2" onClick={() => {
-                                setDropdownTitle("Product 21");
-                            }}>Product 21</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3" onClick={() => {
-                                setDropdownTitle("Product 22");
-                            }}>Product 22</Dropdown.Item>
-                            <Dropdown.Item href="#/action-1" onClick={() => {
-                                setDropdownTitle("Product 23");
-                            }}>Product 23</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2" onClick={() => {
-                                setDropdownTitle("Product 24");
-                            }}>Product 24</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3" onClick={() => {
-                                setDropdownTitle("Product 25");
-                            }}>Product 25</Dropdown.Item>
-                            <Dropdown.Item href="#/action-1" onClick={() => {
-                                setDropdownTitle("Product 26");
-                            }}>Product 26</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2" onClick={() => {
-                                setDropdownTitle("Product 27");
-                            }}>Product 27</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3" onClick={() => {
-                                setDropdownTitle("Product 28");
-                            }}>Product 28</Dropdown.Item>
                         </DropdownButton>
                         <DropdownButton className=" m-2" style={{padding: '0rem'}} title={monthTitle}>
                             <Dropdown.Item href="#/action-1" onClick={() => {
@@ -239,7 +245,7 @@ const BarChart = () => {
                                 setmonthTitle("OCT");
                             }}>October</Dropdown.Item>
                             <Dropdown.Item href="#/action-1" onClick={() => {
-                                setmonthTitle("NOV");
+                                setmonthTitle("nov");
                             }}>November</Dropdown.Item>
                             <Dropdown.Item href="#/action-2" onClick={() => {
                                 setmonthTitle("DEC");
@@ -248,108 +254,705 @@ const BarChart = () => {
 
                         <DropdownButton className=" m-2" style={{padding: '0rem'}} title={yearTitle}>
                             {year.map(function (item) {
-                                var item1 = item.toString();
+                                const item1 = item.toString();
                                 return (<Dropdown.Item href="#/action-1" onClick={() => {
                                     setyearTitle(item1);
                                 }}>{item1}</Dropdown.Item>)
                             })}
                         </DropdownButton>
                         <Button className=' m-2' variant="success" onClick={sendFileName}>Get Cost Sheet</Button>
-                        {chart.datasets[0].data[0] !== 0 ? (
-                            <Button className=' m-2' variant="success" onClick={downloadCostSheet}>Download Cost
-                                Sheet</Button>) : (<div style={{background: 'none'}}/>)}
+                        {chart1.datasets[0].data[0] !== 0 ? (
+                            <Button className=' m-2' variant="success" onClick={downloadCostSheet}>Download Cost Sheet</Button>) : (<div style={{background: 'none'}}/>)}
                     </div>
-                    <div className="card  p-2 h-100 d-inline-block" style={{width: '65rem'}}>
+                    <div className="card m-2 d-inline-block" style={{width: '65rem'}}>
                         <div className="card-body text-center">
                             <DropdownButton id="dropdown-basic-button" title={`${chart1Type}`}>
                                 <Dropdown.Item onClick={() => {
                                     setChart1Type("line");
-                                }} >Line Graph</Dropdown.Item>
+                                }}>Line Graph</Dropdown.Item>
                                 <Dropdown.Item onClick={() => {
                                     setChart1Type("doughnut");
-                                }} >Doughnut</Dropdown.Item>
+                                }}>Doughnut</Dropdown.Item>
                                 <Dropdown.Item onClick={() => {
                                     setChart1Type("polarArea");
-                                }} >Polar Area chart</Dropdown.Item>
+                                }}>Polar Area chart</Dropdown.Item>
                                 <Dropdown.Item onClick={() => {
                                     setChart1Type("bar");
-                                }} >Bar chart</Dropdown.Item>
+                                }}>Bar chart</Dropdown.Item>
                             </DropdownButton>
                             <div className={'m-2'}>
 
-                                {chart1Type==='bar'?(<Chart
+                                {chart1Type === 'bar' ? (<Chart
                                     type='bar' redraw={true}
                                     options={{
                                         plugins: {
-                                            title: {
-                                                display: true,
-                                                text: "Monthly cost RM"
-                                            },
                                             legend: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Month Cost',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                }
+                                            },
+                                        },
+                                        scales: {
+                                            x: {
                                                 display: true,
-                                                position: "bottom"
-                                            }
-                                        }
+                                                title: {
+                                                    display: true,
+                                                    text: 'Components',
+                                                    color: '#911',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                    padding: {top: 20, left: 0, right: 0, bottom: 0}
+                                                }
+                                            },
+                                            y: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Cost (Rs/Kg)',
+                                                    color: '#191',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        style: 'normal',
+                                                        lineHeight: 1.2
+                                                    },
+                                                    padding: {top: 30, left: 0, right: 0, bottom: 0}
+                                                }
+                                            }},
+
                                     }}
-                                    data={chart}
-                                />):null}
-                                {chart1Type==='line'?(<Chart
+                                    data={chart1}
+                                />) : null}
+                                {chart1Type === 'line' ? (<Chart
                                     type='line' redraw={true}
                                     options={{
                                         plugins: {
-                                            title: {
-                                                display: true,
-                                                text: "Monthly cost RM"
-                                            },
                                             legend: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Month Cost',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                }
+                                            },
+                                        },
+                                        scales: {
+                                            x: {
                                                 display: true,
-                                                position: "bottom"
-                                            }
-                                        }
+                                                title: {
+                                                    display: true,
+                                                    text: 'Components',
+                                                    color: '#911',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                    padding: {top: 20, left: 0, right: 0, bottom: 0}
+                                                }
+                                            },
+                                            y: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Cost (Rs/Kg)',
+                                                    color: '#191',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        style: 'normal',
+                                                        lineHeight: 1.2
+                                                    },
+                                                    padding: {top: 30, left: 0, right: 0, bottom: 0}
+                                                }
+                                            }},
+
                                     }}
-                                    data={chart}
-                                />):null}
-                                {chart1Type==='doughnut'?(<Chart
+                                    data={chart1}
+                                />) : null}
+                                {chart1Type === 'doughnut' ? (<Chart
                                     type='doughnut'
                                     redraw={true}
 
                                     options={{
                                         plugins: {
-                                            title: {
-                                                display: true,
-                                                text: "Monthly cost RM"
-                                            },
                                             legend: {
-                                                display: true,
-                                                position: "bottom"
+                                                title: {
+                                                    display: true,
+                                                    text: 'Month Cost',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                }
                                             },
-                                            layout:{
-                                                autoPadding:true
-                                            }
-                                        }
+                                        },
+                                        scales: {
+                                            x: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Components',
+                                                    color: '#911',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                    padding: {top: 20, left: 0, right: 0, bottom: 0}
+                                                }
+                                            },
+                                            y: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Cost (Rs/Kg)',
+                                                    color: '#191',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        style: 'normal',
+                                                        lineHeight: 1.2
+                                                    },
+                                                    padding: {top: 30, left: 0, right: 0, bottom: 0}
+                                                }
+                                            }},
+
                                     }}
-                                    data={chart}
-                                />):null}{chart1Type==='polarArea'?(<Chart
+                                    data={chart1}
+                                />) : null}{chart1Type === 'polarArea' ? (<Chart
                                 type='polarArea' redraw={true}
                                 options={{
                                     plugins: {
-                                        title: {
-                                            display: true,
-                                            text: "Monthly cost RM"
-                                        },
                                         legend: {
+                                            title: {
+                                                display: true,
+                                                text: 'Month Cost',
+                                                font: {
+                                                    family: 'Helvetica',
+                                                    size: 20,
+                                                    weight: 'bold',
+                                                    lineHeight: 1.2,
+                                                },
+                                            }
+                                        },
+                                    },
+                                    scales: {
+                                        x: {
                                             display: true,
-                                            position: "bottom"
-                                        }
-                                    }
+                                            title: {
+                                                display: true,
+                                                text: 'Components',
+                                                color: '#911',
+                                                font: {
+                                                    family: 'Helvetica',
+                                                    size: 20,
+                                                    weight: 'bold',
+                                                    lineHeight: 1.2,
+                                                },
+                                                padding: {top: 20, left: 0, right: 0, bottom: 0}
+                                            }
+                                        },
+                                        y: {
+                                            display: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Cost (Rs/Kg)',
+                                                color: '#191',
+                                                font: {
+                                                    family: 'Helvetica',
+                                                    size: 20,
+                                                    style: 'normal',
+                                                    lineHeight: 1.2
+                                                },
+                                                padding: {top: 30, left: 0, right: 0, bottom: 0}
+                                            }
+                                        }},
+
                                 }}
-                                data={chart}
-                            />):null}
+                                data={chart1}
+                            />) : null}
                             </div>
+                        </div>
+                    </div>
+                    <div className="card m-2 d-inline-block" style={{width: '65rem'}}>
+                        <div className="card-body text-center">
+                            <DropdownButton id="dropdown-basic-button" title={`${chart2Type}`}>
+                                <Dropdown.Item onClick={() => {
+                                    setChart2Type("line");
+                                }}>Line Graph</Dropdown.Item>
+                                <Dropdown.Item onClick={() => {
+                                    setChart2Type("doughnut");
+                                }}>Doughnut</Dropdown.Item>
+                                <Dropdown.Item onClick={() => {
+                                    setChart2Type("polarArea");
+                                }}>Polar Area chart</Dropdown.Item>
+                                <Dropdown.Item onClick={() => {
+                                    setChart2Type("bar");
+                                }}>Bar chart</Dropdown.Item>
+                            </DropdownButton>
+                            <div className={'m-2 p-3'}>
 
+                                {chart2Type === 'bar' ? (<Chart
+                                    type='bar' redraw={true}
+                                    options={{
+                                        plugins: {
+                                            legend: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Month Rate',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                }
+                                            },
+                                        },
+                                        scales: {
+                                            x: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Components',
+                                                    color: '#911',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                    padding: {top: 20, left: 0, right: 0, bottom: 0}
+                                                }
+                                            },
+                                            y: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Rate (Kg/Kg)',
+                                                    color: '#191',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        style: 'normal',
+                                                        lineHeight: 1.2
+                                                    },
+                                                    padding: {top: 30, left: 0, right: 0, bottom: 0}
+                                                }
+                                            }},
 
+                                    }}
+                                    data={chart2}
+                                />) : null}
+                                {chart2Type === 'line' ? (<Chart
+                                    type='line' redraw={true}
+                                    options={{
+                                        plugins: {
+                                            legend: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Month Rate',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                }
+                                            },
+                                        },
+                                        scales: {
+                                            x: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Components',
+                                                    color: '#911',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                    padding: {top: 20, left: 0, right: 0, bottom: 0}
+                                                }
+                                            },
+                                            y: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Rate (Kg/Kg)',
+                                                    color: '#191',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        style: 'normal',
+                                                        lineHeight: 1.2
+                                                    },
+                                                    padding: {top: 30, left: 0, right: 0, bottom: 0}
+                                                }
+                                            }},
+
+                                    }}
+                                    data={chart2}
+                                />) : null}
+                                {chart2Type === 'doughnut' ? (<Chart
+                                    type='doughnut'
+                                    redraw={true}
+
+                                    options={{
+                                        plugins: {
+                                            legend: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Month Rate',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                }
+                                            },
+                                        },
+                                        scales: {
+                                            x: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Components',
+                                                    color: '#911',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                    padding: {top: 20, left: 0, right: 0, bottom: 0}
+                                                }
+                                            },
+                                            y: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Rate (Kg/Kg)',
+                                                    color: '#191',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        style: 'normal',
+                                                        lineHeight: 1.2
+                                                    },
+                                                    padding: {top: 30, left: 0, right: 0, bottom: 0}
+                                                }
+                                            }},
+
+                                    }}
+                                    data={chart2}
+                                />) : null}{chart2Type === 'polarArea' ? (<Chart
+                                type='polarArea' redraw={true}
+                                options={{
+                                    plugins: {
+                                        legend: {
+                                            title: {
+                                                display: true,
+                                                text: 'Month Rate',
+                                                font: {
+                                                    family: 'Helvetica',
+                                                    size: 20,
+                                                    weight: 'bold',
+                                                    lineHeight: 1.2,
+                                                },
+                                            }
+                                        },
+                                    },
+                                    scales: {
+                                        x: {
+                                            display: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Components',
+                                                color: '#911',
+                                                font: {
+                                                    family: 'Helvetica',
+                                                    size: 20,
+                                                    weight: 'bold',
+                                                    lineHeight: 1.2,
+                                                },
+                                                padding: {top: 20, left: 0, right: 0, bottom: 0}
+                                            }
+                                        },
+                                        y: {
+                                            display: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Rate (Kg/Kg)',
+                                                color: '#191',
+                                                font: {
+                                                    family: 'Helvetica',
+                                                    size: 20,
+                                                    style: 'normal',
+                                                    lineHeight: 1.2
+                                                },
+                                                padding: {top: 30, left: 0, right: 0, bottom: 0}
+                                            }
+                                        }},
+
+                                }}
+                                data={chart2}
+                            />) : null}
                             </div>
+                        </div>
+                    </div>
+                    <div className="card  m-2 d-inline-block" style={{width: '65rem'}}>
+                        <div className="card-body text-center">
+                            <DropdownButton id="dropdown-basic-button" title={`${chart3Type}`}>
+                                <Dropdown.Item onClick={() => {
+                                    setChart3Type("line");
+                                }}>Line Graph</Dropdown.Item>
+                                <Dropdown.Item onClick={() => {
+                                    setChart3Type("doughnut");
+                                }}>Doughnut</Dropdown.Item>
+                                <Dropdown.Item onClick={() => {
+                                    setChart3Type("polarArea");
+                                }}>Polar Area chart</Dropdown.Item>
+                                <Dropdown.Item onClick={() => {
+                                    setChart3Type("bar");
+                                }}>Bar chart</Dropdown.Item>
+                            </DropdownButton>
+                            <div className={'m-2'}>
 
+                                {chart3Type === 'bar' ? (<Chart
+                                    type='bar' redraw={true}
+                                    options={{
+                                        plugins: {
+                                            legend: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Month Consumption',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                }
+                                            },
+                                        },
+                                        scales: {
+                                            x: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Components',
+                                                    color: '#911',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                    padding: {top: 20, left: 0, right: 0, bottom: 0}
+                                                }
+                                            },
+                                            y: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Consumption (Kg/Kg)',
+                                                    color: '#191',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        style: 'normal',
+                                                        lineHeight: 1.2
+                                                    },
+                                                    padding: {top: 30, left: 0, right: 0, bottom: 0}
+                                                }
+                                            }},
+
+                                    }}
+                                    data={chart3}
+                                />) : null}
+                                {chart3Type === 'line' ? (<Chart
+                                    type='line' redraw={true}
+                                    options={{
+                                        plugins: {
+                                            legend: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Month Consumption',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                }
+                                            },
+                                        },
+                                        scales: {
+                                            x: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Components',
+                                                    color: '#911',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                    padding: {top: 20, left: 0, right: 0, bottom: 0}
+                                                }
+                                            },
+                                            y: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Consumption (Kg/Kg)',
+                                                    color: '#191',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        style: 'normal',
+                                                        lineHeight: 1.2
+                                                    },
+                                                    padding: {top: 30, left: 0, right: 0, bottom: 0}
+                                                }
+                                            }},
+
+                                    }}
+                                    data={chart3}
+                                />) : null}
+                                {chart3Type === 'doughnut' ? (<Chart
+                                    type='doughnut'
+                                    redraw={true}
+
+                                    options={{
+                                        plugins: {
+                                            legend: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Month Consumption',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                }
+                                            },
+                                        },
+                                        scales: {
+                                            x: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Components',
+                                                    color: '#911',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        weight: 'bold',
+                                                        lineHeight: 1.2,
+                                                    },
+                                                    padding: {top: 20, left: 0, right: 0, bottom: 0}
+                                                }
+                                            },
+                                            y: {
+                                                display: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Consumption (Kg/Kg)',
+                                                    color: '#191',
+                                                    font: {
+                                                        family: 'Helvetica',
+                                                        size: 20,
+                                                        style: 'normal',
+                                                        lineHeight: 1.2
+                                                    },
+                                                    padding: {top: 30, left: 0, right: 0, bottom: 0}
+                                                }
+                                            }},
+
+                                    }}
+                                    data={chart3}
+                                />) : null}{chart3Type === 'polarArea' ? (<Chart
+                                type='polarArea' redraw={true}
+                                options={{
+                                    plugins: {
+                                        legend: {
+                                            title: {
+                                                display: true,
+                                                text: 'Month Consumption',
+                                                font: {
+                                                    family: 'Helvetica',
+                                                    size: 20,
+                                                    weight: 'bold',
+                                                    lineHeight: 1.2,
+                                                },
+                                            }
+                                        },
+                                    },
+                                    scales: {
+                                        x: {
+                                            display: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Components',
+                                                color: '#911',
+                                                font: {
+                                                    family: 'Helvetica',
+                                                    size: 20,
+                                                    weight: 'bold',
+                                                    lineHeight: 1.2,
+                                                },
+                                                padding: {top: 20, left: 0, right: 0, bottom: 0}
+                                            }
+                                        },
+                                        y: {
+                                            display: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Consumption (Kg/Kg)',
+                                                color: '#191',
+                                                font: {
+                                                    family: 'Helvetica',
+                                                    size: 20,
+                                                    style: 'normal',
+                                                    lineHeight: 1.2
+                                                },
+                                                padding: {top: 30, left: 0, right: 0, bottom: 0}
+                                            }
+                                        }},
+
+                                }}
+                                data={chart3}
+                            />) : null}
+                            </div>
+                        </div>
                     </div>
 
                 </div>
